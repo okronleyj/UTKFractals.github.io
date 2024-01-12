@@ -26,6 +26,8 @@
         const canvas = document.getElementById('mandelbrotCanvas');
         const ctx = canvas.getContext('2d');
 
+        let zoom = 1;
+
         const maxIterations = 100;
 
         function mandelbrot(c_real, c_imag) {
@@ -52,8 +54,8 @@
 
             for (let x = 0; x < canvas.width; x++) {
                 for (let y = 0; y < canvas.height; y++) {
-                    const c_real = (x - canvas.width / 2) * 4 / canvas.width;
-                    const c_imag = (y - canvas.height / 2) * 4 / canvas.height;
+                    const c_real = (x - canvas.width / 2) * 4 / (zoom * canvas.width);
+                    const c_imag = (y - canvas.height / 2) * 4 / (zoom * canvas.height);
 
                     const iterations = mandelbrot(c_real, c_imag);
 
@@ -69,6 +71,14 @@
 
             ctx.putImageData(imageData, 0, 0);
         }
+
+        function handleZoom(event) {
+            event.preventDefault();
+            zoom += event.deltaY / 1000;
+            drawMandelbrot();
+        }
+
+        canvas.addEventListener('wheel', handleZoom);
 
         drawMandelbrot();
     </script>

@@ -1,10 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mandelbrot Set</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+        }
+
+        canvas {
+            border: 1px solid #fff;
+        }
+    </style>
+</head>
 <body>
+    <canvas id="mandelbrotCanvas" width="800" height="800"></canvas>
 
-<h1>My First Heading</h1>
+    <script>
+        const canvas = document.getElementById('mandelbrotCanvas');
+        const ctx = canvas.getContext('2d');
 
-<p>My first paragraph.</p>
+        const maxIterations = 100;
 
+        function mandelbrot(c_real, c_imag) {
+            let z_real = c_real;
+            let z_imag = c_imag;
+
+            for (let i = 0; i < maxIterations; i++) {
+                const temp_real = z_real * z_real - z_imag * z_imag + c_real;
+                const temp_imag = 2 * z_real * z_imag + c_imag;
+
+                z_real = temp_real;
+                z_imag = temp_imag;
+
+                if (z_real * z_real + z_imag * z_imag > 4) {
+                    return i;
+                }
+            }
+
+            return maxIterations;
+        }
+
+        function drawMandelbrot() {
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+            for (let x = 0; x < canvas.width; x++) {
+                for (let y = 0; y < canvas.height; y++) {
+                    const c_real = (x - canvas.width / 2) * 4 / canvas.width;
+                    const c_imag = (y - canvas.height / 2) * 4 / canvas.height;
+
+                    const iterations = mandelbrot(c_real, c_imag);
+
+                    const color = iterations === maxIterations ? 0 : iterations % 16 * 16;
+
+                    const index = (x + y * canvas.width) * 4;
+                    imageData.data[index] = color;
+                    imageData.data[index + 1] = color;
+                    imageData.data[index + 2] = color;
+                    imageData.data[index + 3] = 255;
+                }
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        drawMandelbrot();
+    </script>
 </body>
 </html>

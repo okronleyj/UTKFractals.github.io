@@ -94,8 +94,8 @@
                 const deltaX = event.clientX - dragStartX;
                 const deltaY = event.clientY - dragStartY;
 
-                offsetX += deltaX * 4 / (zoom * canvas.width);
-                offsetY += deltaY * 4 / (zoom * canvas.height);
+                offsetX += deltaX * 100 / (zoom * canvas.width);
+                offsetY += deltaY * 100 / (zoom * canvas.height);
 
                 drawMandelbrot();
 

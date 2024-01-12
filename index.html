@@ -27,6 +27,11 @@
         const ctx = canvas.getContext('2d');
 
         let zoom = 1;
+        let offsetX = 0;
+        let offsetY = 0;
+        let isDragging = false;
+        let dragStartX;
+        let dragStartY;
 
         const maxIterations = 100;
 
@@ -54,8 +59,8 @@
 
             for (let x = 0; x < canvas.width; x++) {
                 for (let y = 0; y < canvas.height; y++) {
-                    const c_real = (x - canvas.width / 2) * 4 / (zoom * canvas.width);
-                    const c_imag = (y - canvas.height / 2) * 4 / (zoom * canvas.height);
+                    const c_real = (x - canvas.width / 2 + offsetX) * 4 / (zoom * canvas.width);
+                    const c_imag = (y - canvas.height / 2 + offsetY) * 4 / (zoom * canvas.height);
 
                     const iterations = mandelbrot(c_real, c_imag);
 
@@ -78,7 +83,35 @@
             drawMandelbrot();
         }
 
+        function handleMouseDown(event) {
+            isDragging = true;
+            dragStartX = event.clientX;
+            dragStartY = event.clientY;
+        }
+
+        function handleMouseMove(event) {
+            if (isDragging) {
+                const deltaX = event.clientX - dragStartX;
+                const deltaY = event.clientY - dragStartY;
+
+                offsetX += deltaX * 4 / (zoom * canvas.width);
+                offsetY += deltaY * 4 / (zoom * canvas.height);
+
+                drawMandelbrot();
+
+                dragStartX = event.clientX;
+                dragStartY = event.clientY;
+            }
+        }
+
+        function handleMouseUp() {
+            isDragging = false;
+        }
+
         canvas.addEventListener('wheel', handleZoom);
+        canvas.addEventListener('mousedown', handleMouseDown);
+        canvas.addEventListener('mousemove', handleMouseMove);
+        canvas.addEventListener('mouseup', handleMouseUp);
 
         drawMandelbrot();
     </script>

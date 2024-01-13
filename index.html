@@ -32,6 +32,7 @@
         let isDragging = false;
         let dragStartX;
         let dragStartY;
+        let step = 2; // Change this to adjust the resolution
 
         const maxIterations = 100;
 
@@ -55,10 +56,10 @@
         }
 
         function drawMandelbrot() {
-            const imageData = ctx.getImageData(0, 0, canvas.width/4, canvas.height/4);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-            for (let x = 0; x < canvas.width; x++) {
-                for (let y = 0; y < canvas.height; y++) {
+            for (let x = 0; x < canvas.width; x += step) {
+                for (let y = 0; y < canvas.height; y += step) {
                     const c_real = (x - canvas.width / 2 + offsetX) * 4 / (zoom * canvas.width);
                     const c_imag = (y - canvas.height / 2 + offsetY) * 4 / (zoom * canvas.height);
 
@@ -66,11 +67,20 @@
 
                     const color = iterations === maxIterations ? 0 : iterations % 16 * 16;
 
-                    const index = (x + y * canvas.width) * 4;
-                    imageData.data[index] = color;
-                    imageData.data[index + 1] = color;
-                    imageData.data[index + 2] = color;
-                    imageData.data[index + 3] = 255;
+                    for (let i = 0; i < step; i++) {
+                        for (let j = 0; j < step; j++) {
+                            const pixelX = x + i;
+                            const pixelY = y + j;
+
+                            if (pixelX < canvas.width && pixelY < canvas.height) {
+                                const index = (pixelX + pixelY * canvas.width) * 4;
+                                imageData.data[index] = color;
+                                imageData.data[index + 1] = color;
+                                imageData.data[index + 2] = color;
+                                imageData.data[index + 3] = 255;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -94,8 +104,8 @@
                 const deltaX = event.clientX - dragStartX;
                 const deltaY = event.clientY - dragStartY;
 
-                offsetX += deltaX * -1000 / (zoom * canvas.width);
-                offsetY += deltaY * -1000 / (zoom * canvas.height);
+                offsetX += deltaX * 4 / (zoom * canvas.width);
+                offsetY += deltaY * 4 / (zoom * canvas.height);
 
                 drawMandelbrot();
 
@@ -117,3 +127,4 @@
     </script>
 </body>
 </html>
+

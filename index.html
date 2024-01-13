@@ -60,8 +60,8 @@
 
             for (let x = 0; x < canvas.width; x += step) {
                 for (let y = 0; y < canvas.height; y += step) {
-                    const c_real = (x - canvas.width / 2 + offsetX) * 4 / (zoom * canvas.width);
-                    const c_imag = (y - canvas.height / 2 + offsetY) * 4 / (zoom * canvas.height);
+                    const c_real = (x - canvas.width / 2 + offsetX) * 400 / (zoom * canvas.width);
+                    const c_imag = (y - canvas.height / 2 + offsetY) * 400 / (zoom * canvas.height);
 
                     const iterations = mandelbrot(c_real, c_imag);
 

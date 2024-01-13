@@ -89,7 +89,14 @@
 
         function handleZoom(event) {
             event.preventDefault();
-            zoom += event.deltaY / 1000;
+            const scale = Math.exp(event.deltaY / 1000);
+            const mouseX = event.clientX - canvas.getBoundingClientRect().left;
+            const mouseY = event.clientY - canvas.getBoundingClientRect().top;
+
+            offsetX = (offsetX - mouseX / canvas.width) * scale + mouseX / canvas.width;
+            offsetY = (offsetY - mouseY / canvas.height) * scale + mouseY / canvas.height;
+            zoom *= scale;
+
             drawMandelbrot();
         }
 

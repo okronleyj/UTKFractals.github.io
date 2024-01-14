@@ -20,7 +20,7 @@
     </style>
 </head>
 <body>
-    <canvas id="mandelbrotCanvas" width="800" height="800"></canvas>
+    <canvas id="mandelbrotCanvas" width="600" height="600"></canvas>
 
     <script>
         const canvas = document.getElementById('mandelbrotCanvas');
@@ -35,7 +35,7 @@
         let step = 1; // Change this to adjust the resolution
         const maxIterations = 100;
 
-        var naturalLog = Math.sqrt(zoom)
+        var naturalLog = zoom**(2/3)
         
         function mandelbrot(c_real, c_imag) {
             let z_real = c_real;

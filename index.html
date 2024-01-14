@@ -33,7 +33,7 @@
         let dragStartX;
         let dragStartY;
         let step = 1; // Change this to adjust the resolution
-        const maxIterations = 200;
+        const maxIterations = 100;
 
         var naturalLog = Math.log(zoom)
         
@@ -41,7 +41,7 @@
             let z_real = c_real;
             let z_imag = c_imag;
             
-            for (let i = 0; i < maxIterations * ((naturalLog)/2.30258509299+1); i++) {
+            for (let i = 0; i < maxIterations * ((naturalLog)/1.0+1); i++) {
                 const temp_real = z_real * z_real - z_imag * z_imag + c_real;
                 const temp_imag = 2 * z_real * z_imag + c_imag;
 

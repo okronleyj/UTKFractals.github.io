@@ -77,11 +77,18 @@
         }
 
         function getColor(iterations) {
-            const hue = iterations / maxIterations * 360;
-            const saturation = 1.0;
-            const lightness = iterations === maxIterations ? 0 : 0.5;
+
+            if (iterations === maxIterations) {
+                // Exterior color
+                return [0, 0, 0];
+            } else {
+                // Interior color
+                const hue = iterations / maxIterations * 360;
+                const saturation = 1;
+                const lightness = 0.5;
+                return hslToRgb(hue, saturation, lightness);
+            }
             
-            return hslToRgb(hue, saturation, lightness);
         }
 
         function hslToRgb(h, s, l) {

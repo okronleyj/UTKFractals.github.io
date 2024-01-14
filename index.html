@@ -1,30 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mandelbrot Set</title>
-    <style>
+	
+	
+	<style>
         body {
             margin: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
             background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
         }
+
+		h1 {
+            margin: 20px 0;
+        }
+
+		#zoomValue {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+		
+		#zoomSqrtValue {
+            position: absolute;
+            top: 30px;
+            left: 10px;
+        }
+
 
         canvas {
             border: 1px solid #fff;
         }
+		
+		}
+		
+		#iterationsSlider {
+            width: 80%;
+            margin-bottom: 20px;
+        }
+
+
+		
     </style>
 </head>
 <body>
-    <canvas id="mandelbrotCanvas" width="800" height="800"></canvas>
+
+	<h1>Welcome to the Interesting World of Fractals!</h1>
+    <canvas id="mandelbrotCanvas" width="600" height="600"></canvas>
+	<div id="zoomValue"></div>
+	<div id="zoomSqrtValue"></div>
+	
+	<input id="iterationsSlider" type="range" min="1" max="500" value="100" step="1">
+
+	<p>Adjust the resolution with the slider</p>
+
+	<h1>Weierstrass Function Graph</h1>
+    <label for="termCount">Number of Terms:</label>
+    <input type="range" id="termCount" min="1" max="100" value="10" step="1" oninput="updateGraph()">
+    <p id="termCountValue">Number of Terms: 10</p>
+
+    <div id="graphContainer"></div>
+
+
+
+	
+	<h1>Welcome to the Interesting World of Fractals!</h1>
+	<p>Adjust the resolution with the slider</p>
+	
+	<h1>Welcome to the Interesting World of Fractals!</h1>
+	<p>Adjust the resolution with the slider</p>
+	
+	<h1>Welcome to the Interesting World of Fractals!</h1>
+	<p>Adjust the resolution with the slider</p>
+	
+	<h1>Welcome to the Interesting World of Fractals!</h1>
+	<p>Adjust the resolution with the slider</p>
+	
+	<h1>Welcome to the Interesting World of Fractals!</h1>
+	<p>Adjust the resolution with the slider</p>
 
     <script>
         const canvas = document.getElementById('mandelbrotCanvas');
         const ctx = canvas.getContext('2d');
+		const zoomValueElement = document.getElementById('zoomValue');
+		const zoomSqrtValueElement = document.getElementById('zoomSqrtValue');
+		const iterationsSlider = document.getElementById('iterationsSlider');
+
 
         let zoom = 1;
         let offsetX = 0;
@@ -33,22 +101,26 @@
         let dragStartX;
         let dragStartY;
         let step = 1; // Change this to adjust the resolution
-        const maxIterations = 500;
+        //const maxIterations = 200;
+		let maxIterations = parseInt(iterationsSlider.value, 10);
 
-        var naturalLog = zoom**(0.8)
-        
+		iterationsSlider.addEventListener('input', () => {
+            maxIterations = parseInt(iterationsSlider.value, 10);
+            drawMandelbrot();
+        });
+
         function mandelbrot(c_real, c_imag) {
             let z_real = c_real;
             let z_imag = c_imag;
-            
-            for (let i = 0; i < maxIterations; i++) {
+
+            for (let i = 0; i < maxIterations*((Math.log(zoom))/Math.log(15)+1.0); i++) {
                 const temp_real = z_real * z_real - z_imag * z_imag + c_real;
                 const temp_imag = 2 * z_real * z_imag + c_imag;
 
                 z_real = temp_real;
                 z_imag = temp_imag;
 
-                if (z_real * z_real + z_imag * z_imag > 4) {
+                if (Math.sqrt(z_real * z_real + z_imag * z_imag) > 4) {
                     return i;
                 }
             }
@@ -86,6 +158,8 @@
             }
 
             ctx.putImageData(imageData, 0, 0);
+			zoomValueElement.textContent = `Zoom: ${zoom.toFixed(2)}`;
+			zoomSqrtValueElement.textContent = `ZoomSQ: ${((Math.log(zoom))/Math.log(15)+1.0).toFixed(2)}`;
         }
 
         function getColor(iterations) {
@@ -155,8 +229,8 @@
                 const deltaX = event.clientX - dragStartX;
                 const deltaY = event.clientY - dragStartY;
 
-                offsetX += deltaX * -400 / (canvas.width);
-                offsetY += deltaY * -400 / (canvas.height);
+                offsetX += deltaX * -600 / (canvas.width);
+                offsetY += deltaY * -600 / (canvas.height);
 
                 drawMandelbrot();
 
@@ -175,6 +249,91 @@
         canvas.addEventListener('mouseup', handleMouseUp);
 
         drawMandelbrot();
+		
+		
+		
+		// Initialize zoom behavior
+
+        // Set up SVG container with zoom behavior
+        var svg = d3.select("#graphContainer")
+            .append("svg")
+            .attr("width", 800)
+            .attr("height", 400)
+            .call(zoom); // Apply zoom behavior to SVG container
+
+        // Set up zoomable group for graph elements
+        var graphGroup = svg.append("g");
+
+        function updateGraph() {
+            // Get the number of terms from the slider
+            var termCount = document.getElementById("termCount").value;
+
+            // Update the display of the number of terms
+            document.getElementById("termCountValue").innerHTML = "Number of Terms: " + termCount;
+
+            // Generate data points for the Weierstrass function
+            var data = generateWeierstrassData(termCount);
+
+            // Draw the graph using D3.js
+            drawGraph(data);
+        }
+
+        function generateWeierstrassData(termCount) {
+            // Generate data points for the Weierstrass function
+            // You can customize the function as needed
+            var data = [];
+            for (var i = 0; i <= 10000; i++) {
+                var x = i / 1000;
+                var y = 0;
+                for (var n = 0; n < termCount; n++) {
+                    y += Math.pow(0.5, n) * Math.cos(Math.pow(3, n) * Math.PI * x);
+                }
+                data.push({ x: x, y: y });
+            }
+            return data;
+        }
+
+        function drawGraph(data) {
+            // Clear previous graph
+            graphGroup.selectAll("*").remove();
+
+            // Set up scales for x and y axes
+            var xScale = d3.scaleLinear()
+                .domain([0, 10])
+                .range([0, 800]);
+
+            var yScale = d3.scaleLinear()
+                .domain([-2, 2])
+                .range([400, 0]);
+
+            // Create line function
+            var line = d3.line()
+                .x(function(d) { return xScale(d.x); })
+                .y(function(d) { return yScale(d.y); });
+
+            // Draw the line
+            graphGroup.append("path")
+                .data([data])
+                .attr("class", "line")
+                .attr("d", line)
+                .attr("stroke", "blue")
+                .attr("fill", "none");
+
+            // Draw x-axis
+            graphGroup.append("g")
+                .attr("transform", "translate(0," + 400 + ")")
+                .call(d3.axisBottom(xScale));
+
+            // Draw y-axis
+            graphGroup.append("g")
+                .call(d3.axisLeft(yScale));
+        }
+
+
+        // Initial graph on page load
+        updateGraph();
+		
+		
     </script>
 </body>
 </html>

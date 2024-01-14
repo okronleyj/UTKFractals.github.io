@@ -20,7 +20,7 @@
     </style>
 </head>
 <body>
-    <canvas id="mandelbrotCanvas" width="800" height="800"></canvas>
+    <canvas id="mandelbrotCanvas" width="600" height="600"></canvas>
 
     <script>
         const canvas = document.getElementById('mandelbrotCanvas');
@@ -32,8 +32,8 @@
         let isDragging = false;
         let dragStartX;
         let dragStartY;
-        let step = 2; // Change this to adjust the resolution
-        const maxIterations = 1000;
+        let step = 1; // Change this to adjust the resolution
+        const maxIterations = 500;
 
         var naturalLog = zoom**(0.8)
         

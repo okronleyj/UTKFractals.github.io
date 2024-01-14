@@ -33,7 +33,7 @@
         let dragStartX;
         let dragStartY;
         let step = 2; // Change this to adjust the resolution
-        const maxIterations = 100;
+        const maxIterations = 500;
 
         function mandelbrot(c_real, c_imag) {
             let z_real = c_real;
@@ -153,8 +153,8 @@
                 const deltaX = event.clientX - dragStartX;
                 const deltaY = event.clientY - dragStartY;
 
-                offsetX += deltaX * -400 / (zoom * canvas.width);
-                offsetY += deltaY * -400 / (zoom * canvas.height);
+                offsetX += deltaX * -4000 / (canvas.width);
+                offsetY += deltaY * -4000 / (canvas.height);
 
                 drawMandelbrot();
 

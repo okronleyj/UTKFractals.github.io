@@ -69,7 +69,7 @@
                     imageData.data[index] = color[0];
                     imageData.data[index + 1] = color[1];
                     imageData.data[index + 2] = color[2];
-                    imageData.data[index + 3] = 50;
+                    imageData.data[index + 3] = 255;
                 }
             }
 
@@ -78,7 +78,7 @@
 
         function getColor(iterations) {
             const hue = iterations / maxIterations * 360;
-            const saturation = 1;
+            const saturation = 10;
             const lightness = iterations === maxIterations ? 0 : 0.5;
             
             return hslToRgb(hue, saturation, lightness);

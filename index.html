@@ -12,19 +12,28 @@
             align-items: center;
             height: 100vh;
             background-color: #000;
+            color: #fff;
         }
 
         canvas {
             border: 1px solid #fff;
         }
+
+        #zoomValue {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
     </style>
 </head>
 <body>
     <canvas id="mandelbrotCanvas" width="600" height="600"></canvas>
+    <div id="zoomValue"></div>
 
     <script>
         const canvas = document.getElementById('mandelbrotCanvas');
         const ctx = canvas.getContext('2d');
+        const zoomValueElement = document.getElementById('zoomValue');
 
         let zoom = 1;
         let offsetX = 0;
@@ -32,8 +41,8 @@
         let isDragging = false;
         let dragStartX;
         let dragStartY;
-        let step = 1; // Change this to adjust the resolution
-        const maxIterations = 500;
+        let step = 2; // Change this to adjust the resolution
+        const maxIterations = 100;
 
         function mandelbrot(c_real, c_imag) {
             let z_real = c_real;
@@ -84,6 +93,7 @@
             }
 
             ctx.putImageData(imageData, 0, 0);
+            zoomValueElement.textContent = `Zoom: ${zoom.toFixed(2)}`;
         }
 
         function getColor(iterations) {
@@ -123,7 +133,7 @@
 
                 r = hue2rgb(p, q, h - 1 / 6);
                 g = hue2rgb(p, q, h);
-                b = hue2rgb(p, q, h + 1 / 4);
+                b = hue2rgb(p, q, h - 1 / 4);
             }
 
             return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
@@ -153,8 +163,8 @@
                 const deltaX = event.clientX - dragStartX;
                 const deltaY = event.clientY - dragStartY;
 
-                offsetX += deltaX * -400 / (canvas.width);
-                offsetY += deltaY * -400 / (canvas.height);
+                offsetX += deltaX * -500 / (anvas.width);
+                offsetY += deltaY * -500 / (canvas.height);
 
                 drawMandelbrot();
 

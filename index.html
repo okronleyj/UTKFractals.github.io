@@ -107,8 +107,8 @@
                 const p = 2 * l - q;
 
                 r = hue2rgb(p, q, h);
-                g = hue2rgb(p, q, h);
-                b = hue2rgb(p, q, h);
+                g = hue2rgb(p, q, h - 1/6);
+                b = hue2rgb(p, q, h + 1/4);
             }
 
             return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];

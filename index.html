@@ -32,7 +32,8 @@
         let isDragging = false;
         let dragStartX;
         let dragStartY;
-        const maxIterations = 400;
+        let step = 2; // Change this to adjust the resolution
+        const maxIterations = 100;
 
         function mandelbrot(c_real, c_imag) {
             let z_real = c_real;
@@ -56,8 +57,8 @@
         function drawMandelbrot() {
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-            for (let x = 0; x < canvas.width; x++) {
-                for (let y = 0; y < canvas.height; y++) {
+            for (let x = 0; x < canvas.width; x += step) {
+                for (let y = 0; y < canvas.height; y += step) {
                     const c_real = (x - canvas.width / 2 + offsetX) * 4 / (zoom * canvas.width);
                     const c_imag = (y - canvas.height / 2 + offsetY) * 4 / (zoom * canvas.height);
 
@@ -65,11 +66,20 @@
 
                     const color = getColor(iterations);
 
-                    const index = (x + y * canvas.width) * 4;
-                    imageData.data[index] = color[0];
-                    imageData.data[index + 1] = color[1];
-                    imageData.data[index + 2] = color[2];
-                    imageData.data[index + 3] = 255;
+                    for (let i = 0; i < step; i++) {
+                        for (let j = 0; j < step; j++) {
+                            const pixelX = x + i;
+                            const pixelY = y + j;
+
+                            if (pixelX < canvas.width && pixelY < canvas.height) {
+                                const index = (pixelX + pixelY * canvas.width) * 4;
+                                imageData.data[index] = color[0];
+                                imageData.data[index + 1] = color[1];
+                                imageData.data[index + 2] = color[2];
+                                imageData.data[index + 3] = 255;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -77,7 +87,6 @@
         }
 
         function getColor(iterations) {
-
             if (iterations === maxIterations) {
                 // Exterior color
                 return [0, 0, 0];
@@ -88,7 +97,6 @@
                 const lightness = 0.5;
                 return hslToRgb(hue, saturation, lightness);
             }
-            
         }
 
         function hslToRgb(h, s, l) {
@@ -113,9 +121,9 @@
                 const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
                 const p = 2 * l - q;
 
-                r = hue2rgb(p, q, h);
-                g = hue2rgb(p, q, h - 1/6);
-                b = hue2rgb(p, q, h + 1/4);
+                r = hue2rgb(p, q, h - 1 / 6);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h + 1 / 4);
             }
 
             return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
@@ -145,8 +153,8 @@
                 const deltaX = event.clientX - dragStartX;
                 const deltaY = event.clientY - dragStartY;
 
-                offsetX += deltaX * -400 / (canvas.width);
-                offsetY += deltaY * -400 / (canvas.height);
+                offsetX += deltaX * -400 / (zoom * canvas.width);
+                offsetY += deltaY * -400 / (zoom * canvas.height);
 
                 drawMandelbrot();
 

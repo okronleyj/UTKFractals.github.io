@@ -78,7 +78,7 @@
 
         function getColor(iterations) {
             const hue = iterations / maxIterations * 360;
-            const saturation = 10;
+            const saturation = 0.1;
             const lightness = iterations === maxIterations ? 0 : 0.5;
             
             return hslToRgb(hue, saturation, lightness);

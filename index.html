@@ -35,7 +35,7 @@
         let step = 1; // Change this to adjust the resolution
         const maxIterations = 100;
 
-        var naturalLog = Math.log(zoom)
+        var naturalLog = Math.sqrt(zoom)
         
         function mandelbrot(c_real, c_imag) {
             let z_real = c_real;

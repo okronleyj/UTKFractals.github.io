@@ -12,28 +12,19 @@
             align-items: center;
             height: 100vh;
             background-color: #000;
-            color: #fff;
         }
 
         canvas {
             border: 1px solid #fff;
         }
-
-        #zoomValue {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
     </style>
 </head>
 <body>
-    <canvas id="mandelbrotCanvas" width="600" height="600"></canvas>
-    <div id="zoomValue"></div>
+    <canvas id="mandelbrotCanvas" width="800" height="800"></canvas>
 
     <script>
         const canvas = document.getElementById('mandelbrotCanvas');
         const ctx = canvas.getContext('2d');
-        const zoomValueElement = document.getElementById('zoomValue');
 
         let zoom = 1;
         let offsetX = 0;
@@ -41,14 +32,16 @@
         let isDragging = false;
         let dragStartX;
         let dragStartY;
-        let step = 2; // Change this to adjust the resolution
-        const maxIterations = 100;
+        let step = 1; // Change this to adjust the resolution
+        const maxIterations = 200;
 
         function mandelbrot(c_real, c_imag) {
             let z_real = c_real;
             let z_imag = c_imag;
 
-            for (let i = 0; i < maxIterations * (Math.log(y) / Math.log(x)); i++) {
+            let LogVal = zoom-1.0
+            
+            for (let i = 0; i < maxIterations * ((zoom - zoom*zoom/2 + zoom*zoom*zoom/3 - zoom*zoom*zoom*zoom/4 + zoom*zoom*zoom*zoom*zoom/5)/2.30258509299+1); i++) {
                 const temp_real = z_real * z_real - z_imag * z_imag + c_real;
                 const temp_imag = 2 * z_real * z_imag + c_imag;
 
@@ -93,7 +86,6 @@
             }
 
             ctx.putImageData(imageData, 0, 0);
-            zoomValueElement.textContent = `Zoom: ${zoom.toFixed(2)}`;
         }
 
         function getColor(iterations) {
@@ -163,8 +155,8 @@
                 const deltaX = event.clientX - dragStartX;
                 const deltaY = event.clientY - dragStartY;
 
-                offsetX += deltaX * -500 / (canvas.width);
-                offsetY += deltaY * -500 / (canvas.height);
+                offsetX += deltaX * -400 / (canvas.width);
+                offsetY += deltaY * -400 / (canvas.height);
 
                 drawMandelbrot();
 
@@ -186,5 +178,4 @@
     </script>
 </body>
 </html>
-
 

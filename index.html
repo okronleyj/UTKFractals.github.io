@@ -48,7 +48,7 @@
             let z_real = c_real;
             let z_imag = c_imag;
 
-            for (let i = 0; i < maxIterations; i++) {
+            for (let i = 0; i < maxIterations * (Math.log(y) / Math.log(x)); i++) {
                 const temp_real = z_real * z_real - z_imag * z_imag + c_real;
                 const temp_imag = 2 * z_real * z_imag + c_imag;
 
@@ -163,7 +163,7 @@
                 const deltaX = event.clientX - dragStartX;
                 const deltaY = event.clientY - dragStartY;
 
-                offsetX += deltaX * -500 / (anvas.width);
+                offsetX += deltaX * -500 / (canvas.width);
                 offsetY += deltaY * -500 / (canvas.height);
 
                 drawMandelbrot();

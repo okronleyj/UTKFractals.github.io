@@ -41,7 +41,7 @@
 
             let LogVal = zoom-1.0
             
-            for (let i = 0; i < maxIterations * ((zoom - zoom*zoom/2 + zoom*zoom*zoom/3 - zoom*zoom*zoom*zoom/4 + zoom*zoom*zoom*zoom*zoom/5)/2.30258509299+1); i++) {
+            for (let i = 0; i < maxIterations * ((zoom - zoom*zoom/2)/2.30258509299+1); i++) {
                 const temp_real = z_real * z_real - z_imag * z_imag + c_real;
                 const temp_imag = 2 * z_real * z_imag + c_imag;
 

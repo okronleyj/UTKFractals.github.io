@@ -72,7 +72,16 @@
 	
 	<h1>1. The Mandelbrot set</h1>
 	
-	<p>This is probably the most famous example of a fractal that you might have seen before.</p>
+	<p>This is probably the most famous example of a fractal that you might have seen before.  This plots the convergence of a simple function on the complex plane.  The function is given by:</p>
+	
+	$$ f(z) = z^2+c $$
+	
+	<p>and we preform the iteration </p>
+	
+	$$ f_0(0) = 0 + c \quad f_1(f_0(0)) = c^2 + c \quad  f_2(f_1(f_0(0))) = (c^2 + c)^2 + c \quad ...$$
+	
+	<p>This function either converges to a finite value or begin to diverge to infinity. We can make a plot of all points \(c\) on the complex plane to see where this function converges. 
+	Depending on how many iterations it takes to begin to diverge, we can assign the point in the complex plane a color.  This turns out to be a very complex shape and has been named the Mandelbrot set.</p>
 	
 	<h2>Zoom in and explore the Mandelbrot set!</h2>
 	

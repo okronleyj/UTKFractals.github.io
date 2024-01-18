@@ -13,6 +13,10 @@
         }
     </style>
 	
+	<script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+	</script>
+	
 	<style>
         body {
             margin: 25px 50px;
@@ -60,18 +64,19 @@
 
 	<h1>Welcome to the Interesting World of Fractals!</h1>
 	
+	
 	<p> Welcome to the cool fractal website! This website is all about showing off awesome examples of fractals that I personally like and wish to share with you. 
 	Fractals are interesting patterns and shapes that have repetivie geometric patterns, often at small scales. 
 	One this website, we will explore 3 interactive examples of fractals that have practical purpose or are just genreally nice to look at.  
 	I hope you learn a few things about fractals that you didn't know previously!</p>
 	
-	<h1>The Mandelbrot set</h1>
+	<h1>1. The Mandelbrot set</h1>
 	
 	<p>This is probably the most famous example of a fractal that you might have seen before.</p>
 	
 	<h2>Zoom in and explore the Mandelbrot set!</h2>
 	
-	<p>Explore multiple regions to find different patterns</p>
+	<p>Explore multiple regions to find different patterns.  I recommend using a computer mouse to zoom in with the scroll wheel.  Touch pad zoom in is very slow.</p>
 	
 	
     <canvas id="mandelbrotCanvas" width="600" height="600"></canvas>
@@ -83,22 +88,57 @@
 	<p>Adjust the resolution with the slider</p>
 	<p>Believe it or not, I guessed this color scheme in 2 tries</p>
 
-	<h1>Weierstrass Function Graph</h1>
+	<h1>2. Weierstrass Function Graph</h1>
 
-	<p>This one is one of my personal favorites</p>
+	<h2> If a function is continuous, does that mean it's differentiable? </h2>
+	
+	<h2> Turns out No! </h2>
+
+	<p>This one is one of my personal favorite examples using fractals.  The Weierstrass function is a fraction function that is continuous everywhere but no where differentiable.  
+	This is a classic counter example used in real analysis when working with topics in differentiability. </p>
+
+
+    <p>The Weierstrass function is given by:</p>
+    $$ f(x) = \sum_{n=0}^{\infty} a^n\cos(b^n\pi x) $$
+
+
+	<p>Where \(0 < a < 1, b \in 2\mathbb{Z}+1\), and</p>
+	
+	
+	$$ ab> 1 + \frac{3}{2}\pi $$
+
+
+	<h2> Play with the slider.  The function remains continuous but small, sharp fractal like features prevent this function from being differentiable! </h2>
 
     <label for="termCount">Number of Terms:</label>
-    <input type="range" id="termCount" min="1" max="10" value="5" step="1" oninput="updateGraph()">
+    <input type="range" id="termCount" min="1" max="10" value="4" step="1" oninput="updateGraph()">
     <p id="termCountValue">Number of Terms: 10</p>
 
     <div id="graphContainer"></div>
 
+	<p> The derivative actually converges to +/- infinity at each point! </p>
+
+	<h1>3. Coastline paradox </h1>
+
+	<h2> How do you measure the length of a countries coastline?</h2>
+
+	<p> What resolution would you choose? Do rivers count?  What about manmade docks and piers? Does the size fo the coastline change with the tides?  How about sandbars that appear at low tide?</p>
+	
+	<p> It turns out that you cannot measure the length of a country's coastline.  The smaller you make your resolution, the longer the coastline becomes!  The coastline becomes longer and longer and does not converge to a single value.
+	This is known as the coastline paradox. </p>
+
+	<h2> Coastlines have fractal like properties that give them an infinite length! </h2>
+	
+	<p> Below is an interactive map of the coastline of the United States.  Below the map is 3 buttons that allow you to select different coastline resolutions.  
+	Given the selected coastline resolution, the total length is then displayed.  You'll notice that the higher the resolution, the longer the coastline.</p>
+	
 	<div id="map"></div>
 
+	<p> Notice that the higher the resolution, the longer the coastline.  If we have an algorithm that could wrap the coastile of the United States, we could see that the coastline would continuously increase with resolution to infinity.
+	The higher resolution data does cheat a little bit as it includes the coastline for smaller islands.</p>
 
 	<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.3.0"></script>
-
     <script>
         const canvas = document.getElementById('mandelbrotCanvas');
         const ctx = canvas.getContext('2d');
@@ -304,8 +344,9 @@
             // Generate data points for the Weierstrass function
             // You can customize the function as needed
             var data = [];
-            for (var i = 0; i <= 10000; i++) {
-                var x = i / 5000 + 1.0;
+			Num_of_points = 50000;
+            for (var i = 0; i <= Num_of_points; i++) {
+                var x = 2 * i / Num_of_points + 1.0;
                 var y = 0;
                 for (var n = 0; n < termCount; n++) {
                     y += Math.pow(0.5, n) * Math.cos(Math.pow(4, n) * Math.PI * x);
@@ -339,6 +380,7 @@
                 .attr("class", "line")
                 .attr("d", line)
                 .attr("stroke", "blue")
+				.attr("stroke-width", 0.5)
                 .attr("fill", "none");
 
             // Draw x-axis
@@ -2910,5 +2952,3 @@
 
 </body>
 </html>
-
-
